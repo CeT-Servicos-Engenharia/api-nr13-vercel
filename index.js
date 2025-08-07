@@ -4,7 +4,7 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 
 // 2. Carrega as credenciais do Firebase a partir das Variáveis de Ambiente
-const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+const serviceAccount = JSON.parse(process.env.CREDENCIAS_FIREBASE); // <-- CORRIGIDO
 
 // 3. Inicializa o Firebase Admin
 admin.initializeApp({
