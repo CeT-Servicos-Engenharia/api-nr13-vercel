@@ -38,6 +38,8 @@ app.get('/', (req, res) => {
 
 // Rota de exemplo para buscar clientes do Firestore
 app.get('/clients', async (req, res) => {
+  console.log("Requisição recebida na rota /clients"); // <-- ALTERAÇÃO DE DEBUG
+
   if (!db) {
      return res.status(500).send({ message: 'Erro: Conexão com o banco de dados não está disponível.' });
   }
