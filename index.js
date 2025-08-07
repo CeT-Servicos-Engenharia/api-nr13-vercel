@@ -56,3 +56,4 @@ app.get('/clients', async (req, res) => {
 
 // 4. Exporta o 'app' para a Vercel
 module.exports = app;
+
