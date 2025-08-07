@@ -1,31 +1,48 @@
-// 1. Importa as bibliotecas necessárias
+// 1. Importa as bibliotecas
 const express = require('express');
 const cors = require('cors');
+const admin = require('firebase-admin');
 
-// 2. Inicializa o servidor Express
+// 2. Carrega as credenciais do Firebase
+const serviceAccount = require('./firebase-credentials.json');
+
+// 3. Inicializa o Firebase Admin
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+// Cria uma referência para o banco de dados Firestore
+const db = admin.firestore();
+
+// 4. Inicializa o servidor Express
 const app = express();
 
-// 3. Configura os middlewares
-app.use(cors()); // Permite que seu app front-end acesse a API
-app.use(express.json()); // Permite que o servidor entenda requisições com corpo em JSON
+// 5. Configura os middlewares
+app.use(cors());
+app.use(express.json());
 
-// --- AQUI VOCÊ VAI ADICIONAR A LÓGICA DA SUA API ---
-// Por enquanto, vamos deixar uma rota de teste.
+// --- SUAS ROTAS VÊM AQUI ---
 
-// 4. Cria uma rota de teste
+// Rota de teste
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'API NR13 conectada com sucesso!' });
 });
 
-// Exemplo de como seria uma rota para buscar clientes:
-/*
-app.get('/clients', (req, res) => {
-  // Aqui você colocaria a lógica para buscar os clientes no Firebase
-  // e depois retorná-los.
-  // const clients = await db.collection('clients').get();
-  res.status(200).send({ message: 'Rota de clientes a ser implementada' });
+// Rota de exemplo para buscar clientes do Firestore
+app.get('/clients', async (req, res) => {
+  try {
+    const clientsSnapshot = await db.collection('clients').get();
+    const clients = [];
+    clientsSnapshot.forEach((doc) => {
+      clients.push({ id: doc.id, ...doc.data() });
+    });
+    res.status(200).json(clients);
+  } catch (error) {
+    console.error("Erro ao buscar clientes: ", error);
+    res.status(500).send({ message: 'Erro ao buscar clientes no servidor.' });
+  }
 });
-*/
 
-// 5. Exporta o 'app' para a Vercel poder utilizá-lo
+// 6. Exporta o 'app' para a Vercel
 module.exports = app;
+
