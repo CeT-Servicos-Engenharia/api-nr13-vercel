@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
 
-// 2. Carrega as credenciais do Firebase
-const serviceAccount = require('./firebase-credentials.json');
+// 2. Carrega as credenciais do Firebase a partir das Variáveis de Ambiente
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // 3. Inicializa o Firebase Admin
 admin.initializeApp({
@@ -37,7 +37,8 @@ app.get('/clients', async (req, res) => {
       clients.push({ id: doc.id, ...doc.data() });
     });
     res.status(200).json(clients);
-  } catch (error) {
+  } catch (error)
+    {
     console.error("Erro ao buscar clientes: ", error);
     res.status(500).send({ message: 'Erro ao buscar clientes no servidor.' });
   }
@@ -45,4 +46,3 @@ app.get('/clients', async (req, res) => {
 
 // 6. Exporta o 'app' para a Vercel
 module.exports = app;
-
