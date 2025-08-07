@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "build": {
-    "env": {
-      "CREDENCIAS_FIREBASE": "@credenciais_firebase" // <-- CORRIGIDO
-    }
-  },
   "builds": [
     {
       "src": "./index.js",
